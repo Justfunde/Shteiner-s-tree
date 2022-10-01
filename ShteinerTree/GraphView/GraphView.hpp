@@ -17,15 +17,15 @@ class GraphView:public QWidget
 
    public:
    explicit GraphView(QWidget *Parent = nullptr);
-   void SetModel(std::shared_ptr<GraphModel> Model) {this->Model = Model; }
+   void SetModel(std::shared_ptr<GraphModel> Model) {this->Model = Model; update(); }
 
    protected:
    virtual void paintEvent(QPaintEvent *Event) override final;
 
    private:
    void DrawWorkspace(QPainter &Painter);
-   void DrawVerticies();
-   void DrawEdges();
+   void DrawVerticies(QPainter &Painter);
+   void DrawEdges(QPainter &Painter);
 
 };
 

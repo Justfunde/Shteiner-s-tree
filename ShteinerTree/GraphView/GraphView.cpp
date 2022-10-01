@@ -1,4 +1,5 @@
 #include "GraphView.hpp"
+#include <QDebug>
 
 namespace WorkspaceParameters
 {
@@ -34,6 +35,25 @@ void GraphView::DrawWorkspace(QPainter &Painter)
    }
    
 }
+void GraphView::DrawVerticies(QPainter &Painter)
+{
+   if(nullptr == Model) { return;}
+   QPen pen;
+   pen.setColor(Qt::black);
+   pen.setWidth(5);
+   
+   Painter.setPen(pen);
+
+   NodeList list = Model->GetNodes();
+   
+   
+   for(auto iter = list.begin(); iter != list.end();iter++)
+   {
+      QPoint indicies = (*iter)->GetIndicies();
+      qDebug() << indicies;
+      Painter.drawPoint(20 + indicies.x() * 20, 20 +  indicies.y() * 20);
+   }
+}
 
 
 void GraphView::paintEvent(QPaintEvent *Event)
@@ -41,6 +61,7 @@ void GraphView::paintEvent(QPaintEvent *Event)
 
    QPainter Painter(this);
    DrawWorkspace(Painter);
+   DrawVerticies(Painter);
    //QPen pen;
    //pen.setColor(Qt::black);
    //pen.setWidth(1);

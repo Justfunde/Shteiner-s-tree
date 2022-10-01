@@ -1,5 +1,6 @@
 #include <QHBoxLayout>
 #include <QVBoxLayout>
+#include <QFileDialog>
 
 #include "MainWindow.hpp"
 
@@ -18,7 +19,6 @@ MainWindow::MainWindow(QWidget* Parent)
    
    QVBoxLayout* mainLayout = new QVBoxLayout(centralWidget());
 
-
    QHBoxLayout* mainMatrLayout = new QHBoxLayout(this);
    mainMatrLayout->addWidget(FirstGraphWidget);
    mainMatrLayout->addWidget(SecondGraphWidget);   
@@ -29,5 +29,16 @@ MainWindow::MainWindow(QWidget* Parent)
    mainLayout->addSpacerItem(new QSpacerItem(20,20,QSizePolicy::Expanding,QSizePolicy::Minimum));
 
    layout()->setSizeConstraint(QLayout::SetFixedSize);
+
+   connect(buttonBrowse,&QPushButton::clicked,this,&MainWindow::OnBrowse);
+
+}
+
+void
+MainWindow::OnBrowse()
+{
+   QString fileName = QFileDialog::getOpenFileName(this, tr("Выберите файл с графом"),"D:/",tr("GraphFiles (*.graph *.txt)"));
+   if(fileName.isEmpty()) { return;}
+   FirstGraphWidget->ReadFile(fileName);
 
 }

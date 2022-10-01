@@ -8,6 +8,7 @@
 #include <QLabel>
 
 #include "../GraphView/GraphView.hpp"
+#include "../GraphModel/GraphModel.hpp"
 
 class GraphWidget:public QWidget
 {
@@ -37,6 +38,16 @@ class GraphWidget:public QWidget
       setLayout(mainLayout);
       setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding );
       setFixedSize(400, 400);
+   }
+
+   void ReadFile(const QString& fName)
+   {
+      if(fName.isEmpty()) { return;}
+
+      std::shared_ptr<GraphModel> model(new GraphModel);
+      model->InitModel(fName);
+
+      View->SetModel(model);
    }
 };
 

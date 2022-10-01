@@ -15,10 +15,11 @@ class MainWindow:public QMainWindow
    GraphWidget* SecondGraphWidget;
 
    public:
-   
-   explicit MainWindow(QWidget* Parent = nullptr);
-   private:
 
+   explicit MainWindow(QWidget* Parent = nullptr);
+
+   private slots:
+   void OnBrowse();
 };
 
 

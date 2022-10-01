@@ -2,16 +2,98 @@
 #define __GRAPH_MODEL_H__
 
 #include <QWidget>
+#include <QPair>
+#include <QList>
+#include <QString>
+#include <QPoint>
+#include <QFile>
+#include <QTextStream>
+#include <QDebug>
+
+#include <memory>
+#include <list>
+
+class Node;
+
+using NodeList = std::list<std::shared_ptr<Node>>;
+
+class Node
+{
+   private:
+   QString Name;
+   NodeList Links;
+   QPoint Indicies;
+
+   public:
+   Node::Node(
+   const QString &Name,
+   QPoint Indicies)
+   :Indicies(0, 0)
+{
+   this->Name = Name;
+   if(Indicies.x() < 10 && Indicies.y() < 10) 
+   {
+      this->Indicies = Indicies;
+   }
+}
+
+   void AddLink(std::shared_ptr<Node> Vertex);
+   void DeleteLink(std::shared_ptr<Node> Vertex);
+   
+   //setters
+   void SetIndicies(const QPoint &Indicies);
+
+   //getters
+  //getters
+   QPoint GetIndicies() const
+   {
+      return Indicies;
+   }
+
+   //operators
+   friend bool operator==(const Node& First,const Node& Second);
+   //static std::shared_ptr<Node> CreateNode(const QString &Name, const QPoint &Indicies = QPoint()) { return std::shared_ptr<Node>(new Node(Name,Indicies));}
+};
+
 
 class GraphModel
 {
-   Q_OBJECT
    private:
+   NodeList Nodes;
 
    public:
+   GraphModel():Nodes(NodeList()) {}
 
-   private:
+   bool InitModel(const QString &GraphFileName)
+   {
+      bool retVal = true;
+   do
+   {
+      if(GraphFileName.isEmpty()) {return false;}
 
+      QFile file(GraphFileName);
+      retVal = file.open(QIODevice::ReadOnly | QIODevice::Text);
+      if(!retVal) { break;}
+
+      QTextStream fstream(&file);
+      NodeList tmpList;
+      while(!fstream.atEnd())
+      {
+         QString nodeName;
+         qint32 i, j;
+         fstream >> nodeName >> i >> j;
+         qDebug() << nodeName << i << j;
+         std::shared_ptr<Node> node(new Node(nodeName,QPoint(j,i)));
+         if(nullptr == node) { retVal = false; break;}
+         tmpList.push_back(node);
+      }
+      if(!retVal) { break;}
+
+      Nodes = tmpList;
+   } while (false);
+   return retVal;
+   }
+   NodeList GetNodes() const {return Nodes;}
 };
 
 #endif //!__GRAPH_VIEW_H__
