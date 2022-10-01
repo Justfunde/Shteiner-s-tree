@@ -7,12 +7,14 @@ set(CMAKE_AUTORCC ON)
 set(SOURCES_FILES
    MainWindow.cpp
    MatrixWidget/MatrixWidget.cpp
+   GraphView/GraphView.cpp
    main.cpp)
 
 
 set(HEADER_FILES
    MainWindow.hpp
-   MatrixWidget/MatrixWidget.hpp)
+   MatrixWidget/MatrixWidget.hpp
+   GraphView/GraphView.hpp)
 
 set(RESOURCES_FILES)
 

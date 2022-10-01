@@ -17,7 +17,6 @@ class MainWindow:public QMainWindow
    public:
    
    explicit MainWindow(QWidget* Parent = nullptr);
-
    private:
 
 };
