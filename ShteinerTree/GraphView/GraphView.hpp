@@ -7,6 +7,7 @@
 #include <QPainter>
 #include <QPaintEvent>
 #include <memory>
+#include <QPointF>
 
 class GraphView:public QWidget
 {
@@ -26,6 +27,8 @@ class GraphView:public QWidget
    void DrawWorkspace(QPainter &Painter);
    void DrawVerticies(QPainter &Painter);
    void DrawEdges(QPainter &Painter);
+
+   QPoint CalcPointCoord(const QPoint &Indicies);
 
 };
 

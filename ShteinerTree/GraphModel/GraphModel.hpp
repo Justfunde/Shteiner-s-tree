@@ -37,11 +37,27 @@ class Node
    }
 }
 
-   void AddLink(std::shared_ptr<Node> Vertex);
-   void DeleteLink(std::shared_ptr<Node> Vertex);
-   
-   //setters
-   void SetIndicies(const QPoint &Indicies);
+   void AddLink(std::shared_ptr<Node> Vertex)
+{
+   Links.push_back(Vertex);
+}
+
+
+void DeleteLink(std::shared_ptr<Node> Vertex)
+{
+   const auto foundObj = std::find(Links.begin(), Links.end(), Vertex);
+   Links.erase(foundObj);
+}
+
+
+//setters
+   void SetIndicies(const QPoint &Indicies)
+   {
+      if(Indicies.x() < 10 && Indicies.y() < 10) 
+      {
+         this->Indicies = Indicies;
+      }
+   }
 
    //getters
   //getters
@@ -49,6 +65,7 @@ class Node
    {
       return Indicies;
    }
+   NodeList GetLinks() const { return Links;}
 
    //operators
    friend bool operator==(const Node& First,const Node& Second);
@@ -90,6 +107,15 @@ class GraphModel
       if(!retVal) { break;}
 
       Nodes = tmpList;
+
+      auto endIter = Nodes.end();
+      endIter--;
+      for(auto it = Nodes.begin(); it != endIter;)
+      {
+         (*it)->AddLink(*(++it));
+      }
+
+
    } while (false);
    return retVal;
    }

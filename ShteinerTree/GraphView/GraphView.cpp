@@ -1,10 +1,12 @@
 #include "GraphView.hpp"
 #include <QDebug>
+#include <QPointF>
 
 namespace WorkspaceParameters
 {
    constexpr quint32 width = 220;
    constexpr quint32 height = 220;
+   constexpr quint32 vertexSz = 5;
 }
 
 GraphView::GraphView(QWidget *Parent):QWidget(Parent)
@@ -35,12 +37,14 @@ void GraphView::DrawWorkspace(QPainter &Painter)
    }
    
 }
+
+
 void GraphView::DrawVerticies(QPainter &Painter)
 {
    if(nullptr == Model) { return;}
    QPen pen;
    pen.setColor(Qt::black);
-   pen.setWidth(5);
+   pen.setWidth(WorkspaceParameters::vertexSz);
    
    Painter.setPen(pen);
 
@@ -51,8 +55,39 @@ void GraphView::DrawVerticies(QPainter &Painter)
    {
       QPoint indicies = (*iter)->GetIndicies();
       qDebug() << indicies;
-      Painter.drawPoint(20 + indicies.x() * 20, 20 +  indicies.y() * 20);
+      qDebug() << CalcPointCoord((*iter)->GetIndicies());
+      Painter.drawPoint(CalcPointCoord((*iter)->GetIndicies()));
    }
+}
+
+void GraphView::DrawEdges(QPainter &Painter)
+{
+   if(nullptr == Model) { return;}
+
+   QPen pen;
+   pen.setColor(Qt::yellow);
+   pen.setWidth(2);
+   
+   Painter.setPen(pen);
+
+   NodeList list = Model->GetNodes();
+
+   for(auto listIter:list)
+   {
+      NodeList links = listIter->GetLinks();
+      for(auto linksIter:links)
+      {
+         Painter.drawLine(CalcPointCoord(listIter->GetIndicies()),CalcPointCoord(linksIter->GetIndicies()));
+      }
+   }
+}
+
+QPoint GraphView::CalcPointCoord(const QPoint &Indicies)
+{
+   constexpr quint32 beginOffs = 20;
+   constexpr quint32 mulCoeff = 20;
+
+   return QPoint(beginOffs + Indicies.x() * mulCoeff,beginOffs + Indicies.y() * mulCoeff);
 }
 
 
@@ -61,25 +96,7 @@ void GraphView::paintEvent(QPaintEvent *Event)
 
    QPainter Painter(this);
    DrawWorkspace(Painter);
+   DrawEdges(Painter);
    DrawVerticies(Painter);
-   //QPen pen;
-   //pen.setColor(Qt::black);
-   //pen.setWidth(1);
-//
-   //Painter.setPen(pen);
-   ////Painter.drawRect(QRect(0,0,WorkspaceParameters::width,WorkspaceParameters::height));
-//
-   ////verticalLine
-   //for(quint32 j = 0;j <= WorkspaceParameters::width; j += 20)
-   //{
-   //   Painter.drawLine(j, 0, j, WorkspaceParameters::height);
-   //}
-//
-   ////horizontalLine
-   //for(quint32 i = 0;i <= WorkspaceParameters::width; i += 20)
-   //{
-   //   Painter.drawLine(0, i, WorkspaceParameters::width,i);
-   //}
-   
 }
 
