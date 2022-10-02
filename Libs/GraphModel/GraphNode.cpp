@@ -15,7 +15,7 @@ Node::Node(
 
 void
 Node::AddLink(
-   std::shared_ptr<Node> Vertex)
+   NodePtr Vertex)
 {
    Links.push_back(Vertex);
 }
@@ -23,7 +23,7 @@ Node::AddLink(
 
 void
 Node::DeleteLink(
-   std::shared_ptr<Node> Vertex)
+   NodePtr Vertex)
 {
    const auto foundObj = std::find(Links.begin(), Links.end(), Vertex);
    Links.erase(foundObj);

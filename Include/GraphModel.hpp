@@ -11,7 +11,7 @@ class Node;
 
 using NodePtr = std::shared_ptr<Node>;
 
-using NodeList = std::list<std::shared_ptr<Node>>;
+using NodeList = std::list<NodePtr>;
 
 
 class Node
@@ -24,8 +24,8 @@ class Node
    public:
    Node::Node( const QString &Name, const QPoint &Indicies = QPoint(0,0));
 
-   void AddLink(std::shared_ptr<Node> Vertex);
-   void DeleteLink(std::shared_ptr<Node> Vertex);
+   void AddLink(NodePtr Vertex);
+   void DeleteLink(NodePtr Vertex);
 
    void SetIndicies(const QPoint &Indicies);
 
@@ -34,7 +34,7 @@ class Node
 
    //operators
    friend bool operator==(const Node& First,const Node& Second);
-   static std::shared_ptr<Node> CreateNode(const QString &Name, const QPoint &Indicies = QPoint()) { return std::shared_ptr<Node>(new Node(Name,Indicies)); }
+   static NodePtr CreateNode(const QString &Name, const QPoint &Indicies = QPoint()) { return NodePtr(new Node(Name,Indicies)); }
 };
 
 

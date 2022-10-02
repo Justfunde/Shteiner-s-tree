@@ -6,7 +6,7 @@
 NodeList::iterator 
 ShteinerTree::AlgProcessor::FindByVertex(
    NodeList &VertexList,
-   std::shared_ptr<Node> Vertex)
+   NodePtr Vertex)
 {
    return std::find(VertexList.begin(),VertexList.end(),Vertex);
 }
@@ -20,7 +20,7 @@ ShteinerTree::AlgProcessor::Process()
    //NodeList::iterator currentIter = nodeList.begin();
    //while(!nodeList.empty()|| nodeList.size() != 1)
    //{
-   //   std::shared_ptr<Node> currNode = *currentIter;
+   //   NodePtr currNode = *currentIter;
    //   auto foundFirstMinDistObj = FindMinManhattanDistance(nodeList, *currentIter);
    //   LForm lForms = CreateLformVerticies(*currentIter,*foundFirstMinDistObj);
 //
@@ -33,8 +33,8 @@ ShteinerTree::AlgProcessor::Process()
 inline
 qint32
 ShteinerTree::AlgProcessor::CalcManhattanDistance(
-   std::shared_ptr<Node> Fst,
-   std::shared_ptr<Node> Scnd)
+   NodePtr Fst,
+   NodePtr Scnd)
 {
    if(nullptr == Fst || nullptr == Scnd) { return 0;}
 
@@ -49,8 +49,8 @@ inline
 NodeList::iterator
 ShteinerTree::AlgProcessor::FindMinManhattanDistance(
    NodeList &VertexList,
-   std::shared_ptr<Node> Vertex,
-   std::shared_ptr<Node> ExceptVertex)
+   NodePtr Vertex,
+   NodePtr ExceptVertex)
 {
    qint32 minDistance = -1;
    NodeList::iterator retVal = VertexList.begin();
@@ -72,8 +72,8 @@ ShteinerTree::AlgProcessor::FindMinManhattanDistance(
 
 LForm
 ShteinerTree::AlgProcessor::CreateLformVerticies(
-   std::shared_ptr<Node> Fst,
-   std::shared_ptr<Node> Scnd)
+   NodePtr Fst,
+   NodePtr Scnd)
 {
    LForm retVal;
    if(nullptr == Fst || nullptr == Scnd){ return retVal;}
@@ -86,7 +86,7 @@ ShteinerTree::AlgProcessor::CreateLformVerticies(
    return retVal;
 }
 
-std::shared_ptr<Node>
+NodePtr
 ShteinerTree::AlgProcessor::GetResultVertex(
    const LForm &Fst,
    const LForm &Scnd)

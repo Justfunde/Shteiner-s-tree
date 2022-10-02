@@ -4,7 +4,7 @@
 #include "Include/GraphModel.hpp"
 #include <utility>
 
-using LForm = std::pair<std::shared_ptr<Node>,std::shared_ptr<Node>>;
+using LForm = std::pair<NodePtr,NodePtr>;
 
 
 namespace ShteinerTree
@@ -20,11 +20,11 @@ namespace ShteinerTree
 
       private:
 
-      inline qint32 CalcManhattanDistance(std::shared_ptr<Node> Fst, std::shared_ptr<Node> Scnd);
-      inline NodeList::iterator FindMinManhattanDistance(NodeList &VertexList,std::shared_ptr<Node> Vertex, std::shared_ptr<Node> ExceptVertex);
-      LForm CreateLformVerticies(std::shared_ptr<Node> Fst, std::shared_ptr<Node> Scnd);
-      std::shared_ptr<Node> GetResultVertex(const LForm &Fst, const LForm &Scnd);
-      NodeList::iterator FindByVertex(NodeList &VertexList,std::shared_ptr<Node> Vertex);
+      inline qint32 CalcManhattanDistance(NodePtr Fst, NodePtr Scnd);
+      inline NodeList::iterator FindMinManhattanDistance(NodeList &VertexList,NodePtr Vertex, NodePtr ExceptVertex);
+      LForm CreateLformVerticies(NodePtr Fst, NodePtr Scnd);
+      NodePtr GetResultVertex(const LForm &Fst, const LForm &Scnd);
+      NodeList::iterator FindByVertex(NodeList &VertexList,NodePtr Vertex);
    };
 }
 
