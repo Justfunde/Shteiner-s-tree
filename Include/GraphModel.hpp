@@ -9,7 +9,10 @@
 
 class Node;
 
+using NodePtr = std::shared_ptr<Node>;
+
 using NodeList = std::list<std::shared_ptr<Node>>;
+
 
 class Node
 {
@@ -44,6 +47,7 @@ class GraphModel
    GraphModel();
 
    bool InitModel(const QString &GraphFileName);
+   void SetNodes(const NodeList Nodes) { this->Nodes = Nodes;}
    NodeList GetNodes() const;
 };
 

@@ -1,1 +1,3 @@
 add_subdirectory(GraphModel)
+add_subdirectory(GraphView)
+add_subdirectory(ShteinerTreeAlgh)

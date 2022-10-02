@@ -7,7 +7,7 @@
 #include <QString>
 #include <QLabel>
 
-#include "../GraphView/GraphView.hpp"
+#include "Include/GraphView.hpp"
 
 class GraphWidget:public QWidget
 {
@@ -48,6 +48,8 @@ class GraphWidget:public QWidget
 
       View->SetModel(model);
    }
+
+   GraphView* GetView() { return View; }
 };
 
 

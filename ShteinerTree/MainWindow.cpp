@@ -13,7 +13,9 @@ MainWindow::MainWindow(QWidget* Parent)
 
    QHBoxLayout* buttonsLayout = new QHBoxLayout;
    QPushButton* buttonBrowse = new QPushButton(tr("Выбрать файл"),this);
+   QPushButton* buttonAlghProcess = new QPushButton(tr("Обработать ДРП"), this);
    buttonsLayout->addSpacerItem(new QSpacerItem(20,20,QSizePolicy::Expanding,QSizePolicy::Minimum));
+   buttonsLayout->addWidget(buttonAlghProcess);
    buttonsLayout->addWidget(buttonBrowse);
    buttonsLayout->addSpacerItem(new QSpacerItem(20,20,QSizePolicy::Minimum,QSizePolicy::Minimum));
    
@@ -31,6 +33,7 @@ MainWindow::MainWindow(QWidget* Parent)
    layout()->setSizeConstraint(QLayout::SetFixedSize);
 
    connect(buttonBrowse,&QPushButton::clicked,this,&MainWindow::OnBrowse);
+   connect(buttonAlghProcess,&QPushButton::clicked,this,&MainWindow::OnProcAlgh);
 
 }
 
@@ -40,5 +43,10 @@ MainWindow::OnBrowse()
    QString fileName = QFileDialog::getOpenFileName(this, tr("Выберите файл с графом"),"D:/",tr("GraphFiles (*.graph *.txt)"));
    if(fileName.isEmpty()) { return;}
    FirstGraphWidget->ReadFile(fileName);
+}
 
+void 
+MainWindow::OnProcAlgh()
+{
+   
 }

@@ -6,12 +6,13 @@
 #include <QWidget>
 #include <QPainter>
 #include <QPaintEvent>
+#include <QRect>
+
 #include <memory>
-#include <QPointF>
 
 class GraphView:public QWidget
 {
-   Q_OBJECT
+   //todo:add Q_OBJECT
    private:
    std::shared_ptr<GraphModel> Model;
    
@@ -19,6 +20,8 @@ class GraphView:public QWidget
    public:
    explicit GraphView(QWidget *Parent = nullptr);
    void SetModel(std::shared_ptr<GraphModel> Model) {this->Model = Model; update(); }
+
+   std::shared_ptr<GraphModel> GetModel() const { return Model;}
 
    protected:
    virtual void paintEvent(QPaintEvent *Event) override final;
@@ -30,6 +33,7 @@ class GraphView:public QWidget
 
    QPoint CalcPointCoord(const QPoint &Indicies);
 
+   QRect ConvertVertInd2RoundRect(const QPoint &Indicies);
 };
 
 #endif //!__GRAPH_VIEW_H__
