@@ -8,7 +8,6 @@
 #include <QLabel>
 
 #include "../GraphView/GraphView.hpp"
-#include "../GraphModel/GraphModel.hpp"
 
 class GraphWidget:public QWidget
 {

@@ -25,10 +25,10 @@ source_group("Headers Files" FILES ${HEADERS_FILES})
 source_group("Resources Files" FILES ${RESOURCES_FILES})
 
 add_executable(${TARGET_NAME} WIN32  ${SOURCES_FILES} ${HEADERS_FILES}  ${RESOURCES_FILES} ${INSTALLER_FILES})
-target_link_libraries(${TARGET_NAME} Qt5::Core  Qt5::Gui Qt5::Widgets)
+target_link_libraries(${TARGET_NAME} Qt5::Core  Qt5::Gui Qt5::Widgets GraphModel)
 
 
 
 target_include_directories(${TARGET_NAME} 
-   PRIVATE ${INCLUDE_DIRECTORIES}
+   PUBLIC ${SHARED_DIRS}
            ${CMAKE_CURRENT_LIST_DIR})  

@@ -25,6 +25,7 @@ set(CMAKE_PREFIX_PATH "${QT_DIR}")
 
 find_package(Qt5 COMPONENTS Core Gui Widgets Network Xml Sql Help REQUIRED)
 
-set(INCLUDE_DIRECTORIES "${CMAKE_CURRENT_LIST_DIR}/Include")
+set(SHARED_DIRS "${CMAKE_CURRENT_LIST_DIR}")
 
 add_subdirectory(ShteinerTree)
+add_subdirectory(Libs)

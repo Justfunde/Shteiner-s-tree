@@ -1,7 +1,7 @@
 #ifndef __GRAPH_VIEW_H__
 #define __GRAPH_VIEW_H__
 
-#include "../GraphModel/GraphModel.hpp"
+#include "Include/GraphModel.hpp"
 
 #include <QWidget>
 #include <QPainter>
