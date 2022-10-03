@@ -62,7 +62,7 @@ void GraphView::DrawEdges(QPainter &Painter)
    if(nullptr == Model) { return;}
 
    QPen pen;
-   pen.setColor(Qt::yellow);
+   pen.setColor(Qt::red);
    pen.setWidth(2);
    
    Painter.setPen(pen);
@@ -101,7 +101,7 @@ void GraphView::paintEvent(QPaintEvent *Event)
 
    QPainter Painter(this);
    DrawWorkspace(Painter);
-   //DrawEdges(Painter);
+   DrawEdges(Painter);
    DrawVerticies(Painter);
 }
 

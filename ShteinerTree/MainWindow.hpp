@@ -6,7 +6,6 @@
 #include <QPushButton>
 
 #include "MatrixWidget/MatrixWidget.hpp"
-#include "Include/ShteinerTreeAlgh.hpp"
 
 class MainWindow:public QMainWindow
 {

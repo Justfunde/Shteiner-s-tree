@@ -3,6 +3,7 @@
 #include <QFileDialog>
 
 #include "MainWindow.hpp"
+#include "Include/ShteinerTreeAlgh.hpp"
 
 MainWindow::MainWindow(QWidget* Parent)
    :QMainWindow(Parent)
@@ -48,5 +49,7 @@ MainWindow::OnBrowse()
 void 
 MainWindow::OnProcAlgh()
 {
-   
+   ShteinerTree::AlgProcessor processor;
+   processor.SetModel(FirstGraphWidget->GetView()->GetModel());
+   SecondGraphWidget->GetView()->SetModel(processor.Process());
 }

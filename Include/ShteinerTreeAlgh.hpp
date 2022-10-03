@@ -3,8 +3,9 @@
 
 #include "Include/GraphModel.hpp"
 #include <utility>
+#include <QLine>
 
-using LForm = std::pair<NodePtr,NodePtr>;
+using LForm = std::pair<QLine,QLine>;
 
 
 namespace ShteinerTree
@@ -21,11 +22,23 @@ namespace ShteinerTree
       private:
 
       inline qint32 CalcManhattanDistance(NodePtr Fst, NodePtr Scnd);
-      inline NodeList::iterator FindMinManhattanDistance(NodeList &VertexList,NodePtr Vertex, NodePtr ExceptVertex);
-      LForm CreateLformVerticies(NodePtr Fst, NodePtr Scnd);
-      NodePtr GetResultVertex(const LForm &Fst, const LForm &Scnd);
+      inline NodeList::iterator FindMinManhattanDistance(NodeList &VertexList,NodePtr Vertex, const NodeList &ExceptVerticies);
       NodeList::iterator FindByVertex(NodeList &VertexList,NodePtr Vertex);
+
+
+      NodePtr GetResultVertex( std::pair<LForm,LForm> First,
+                               std::pair<LForm,LForm> Second);
+
+
+      std::pair<LForm,LForm> CreateLform(NodePtr Fst, NodePtr Scnd);
+      bool IsLFormIntersected(const LForm &Fst, const LForm &Scnd);
+      int minminDist( NodeList &VertexList,
+   NodePtr Vertex,
+   const NodeList &ExceptVerticies);
+
    };
+
+
 }
 
 #endif //!__SHTEINER_TREE_ALGH_H__

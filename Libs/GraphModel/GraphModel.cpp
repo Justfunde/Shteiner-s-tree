@@ -32,12 +32,6 @@ GraphModel::InitModel(
       }
       if(!retVal) { break;}
       Nodes = tmpList;
-      auto endIter = Nodes.end();
-      endIter--;
-      for(auto it = Nodes.begin(); it != endIter;)
-      {
-         (*it)->AddLink(*(++it));
-      }
    } while (false);
 return retVal;
 }

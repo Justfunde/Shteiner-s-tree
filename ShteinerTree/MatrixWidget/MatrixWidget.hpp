@@ -49,7 +49,7 @@ class GraphWidget:public QWidget
       View->SetModel(model);
    }
 
-   GraphView* GetView() { return View; }
+   GraphView* GetView() const { return View; }
 };
 
 
