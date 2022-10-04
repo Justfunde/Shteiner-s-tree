@@ -5,6 +5,7 @@
 #include "MainWindow.hpp"
 #include "Include/ShteinerTreeAlgh.hpp"
 
+
 MainWindow::MainWindow(QWidget* Parent)
    :QMainWindow(Parent)
    ,FirstGraphWidget(new GraphWidget("Исходная матрица"))
@@ -35,7 +36,6 @@ MainWindow::MainWindow(QWidget* Parent)
 
    connect(buttonBrowse,&QPushButton::clicked,this,&MainWindow::OnBrowse);
    connect(buttonAlghProcess,&QPushButton::clicked,this,&MainWindow::OnProcAlgh);
-
 }
 
 void
@@ -45,6 +45,7 @@ MainWindow::OnBrowse()
    if(fileName.isEmpty()) { return;}
    FirstGraphWidget->ReadFile(fileName);
 }
+
 
 void 
 MainWindow::OnProcAlgh()

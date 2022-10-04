@@ -5,7 +5,7 @@
 #include <QLabel>
 #include <QPushButton>
 
-#include "MatrixWidget/MatrixWidget.hpp"
+#include "GraphWidget/GraphWidget.hpp"
 
 class MainWindow:public QMainWindow
 {

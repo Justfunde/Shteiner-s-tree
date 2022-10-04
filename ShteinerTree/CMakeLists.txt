@@ -6,13 +6,13 @@ set(CMAKE_AUTORCC ON)
 
 set(SOURCES_FILES
    MainWindow.cpp
-   MatrixWidget/MatrixWidget.cpp
+   GraphWidget/GraphWidget.cpp
    main.cpp)
 
 
 set(HEADER_FILES
    MainWindow.hpp
-   MatrixWidget/MatrixWidget.hpp)
+   GraphWidget/GraphWidget.hpp)
 
 set(RESOURCES_FILES)
 
