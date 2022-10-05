@@ -2,39 +2,43 @@
 #define __SHTEINER_TREE_ALGH_H__
 
 #include "Include/GraphModel.hpp"
+
 #include <utility>
 #include <QLine>
 
 using LForm = std::pair<QLine,QLine>;
+using LFormes = std::pair<LForm, LForm>;
 
 
 namespace ShteinerTree
 {
-      class AlgProcessor
+   class AlgProcessor
    {
       private:
-      std::shared_ptr<GraphModel> Model;
+      GraphModelPtr Model;
 
       public:
-      void SetModel(std::shared_ptr<GraphModel> Model) { this->Model = Model;}
-      std::shared_ptr<GraphModel> Process();
+      void SetModel(GraphModelPtr Model) { this->Model = Model;}
+      GraphModelPtr Process();
 
       private:
 
       inline qint32 CalcManhattanDistance(NodePtr Fst, NodePtr Scnd);
-      inline NodeList::iterator FindMinManhattanDistance(NodeList &VertexList,NodePtr Vertex, const NodeList &ExceptVerticies);
-      NodeList::iterator FindByVertex(NodeList &VertexList,NodePtr Vertex);
+      qint32 CalcMinManhattanDist( const NodeList &VertexList, NodePtr Vertex, const NodeList &ExceptVerticies);
 
+      NodeList::const_iterator FindMinManhattanDistance(const NodeList &VertexList, NodePtr Vertex, const NodeList &ExceptVerticies);
+      NodeList::const_iterator FindByVertex(const NodeList &VertexList,NodePtr Vertex);
 
-      NodePtr GetResultVertex( std::pair<LForm,LForm> First,
-                               std::pair<LForm,LForm> Second);
+      
+      //LForm Parse
+      NodePtr GetResultVertex( const LFormes& First,const LFormes& Second);
+      LFormes CreateLform(NodePtr Fst, NodePtr Scnd);
+      bool IsLFormIntersected(const LForm& Fst, const LForm& Scnd);
 
-
-      std::pair<LForm,LForm> CreateLform(NodePtr Fst, NodePtr Scnd);
-      bool IsLFormIntersected(const LForm &Fst, const LForm &Scnd);
-      int minminDist( NodeList &VertexList,
-   NodePtr Vertex,
-   const NodeList &ExceptVerticies);
+      //point parse
+      inline bool IsIntersected (const QLine& Fst, const QLine& Scnd);
+      inline bool IsPointsIntersected (qint32 a, qint32 b, qint32 c, qint32 d);
+      inline qint32 CalcTriangleArea (const QPoint& a, const QPoint& b, const QPoint& c);
 
    };
 

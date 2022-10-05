@@ -9,13 +9,17 @@ namespace WorkspaceParameters
    constexpr quint32 vertexSz = 10;
 }
 
-GraphView::GraphView(QWidget *Parent):QWidget(Parent)
+GraphView::GraphView(
+   QWidget* Parent)
+   :QWidget(Parent)
 {
    setFixedSize(WorkspaceParameters::width + 1, WorkspaceParameters::height + 1);
-   
 }
 
-void GraphView::DrawWorkspace(QPainter &Painter)
+
+void
+GraphView::DrawWorkspace(
+   QPainter &Painter)
 {
    QPen pen;
    pen.setColor(Qt::black);
@@ -37,7 +41,9 @@ void GraphView::DrawWorkspace(QPainter &Painter)
 }
 
 
-void GraphView::DrawVerticies(QPainter &Painter)
+void
+GraphView::DrawVerticies(
+   QPainter& Painter)
 {
    if(nullptr == Model) { return;}
 
@@ -48,12 +54,12 @@ void GraphView::DrawVerticies(QPainter &Painter)
    Painter.setPen(pen);
 
    NodeList list = Model->GetNodes();
-   for(auto iter = list.begin(); iter != list.end();iter++)
+   for(const auto& iter : list)
    {
-      QPoint indicies = (*iter)->GetIndicies();
+      const QPoint& indicies = iter->GetIndicies();
       qDebug() << indicies;
-      qDebug() << CalcPointCoord((*iter)->GetIndicies());
-      Painter.drawEllipse(ConvertVertInd2RoundRect((*iter)->GetIndicies()));
+      qDebug() << CalcPointCoord(iter->GetIndicies());
+      Painter.drawEllipse(ConvertVertInd2RoundRect(iter->GetIndicies()));
    }
 }
 
@@ -67,12 +73,12 @@ void GraphView::DrawEdges(QPainter &Painter)
    
    Painter.setPen(pen);
 
-   NodeList list = Model->GetNodes();
+   const NodeList& list = Model->GetNodes();
 
-   for(auto listIter:list)
+   for(const auto& listIter:list)
    {
-      NodeList links = listIter->GetLinks();
-      for(auto linksIter:links)
+      const NodeList& links = listIter->GetLinks();
+      for(const auto& linksIter:links)
       {
          Painter.drawLine(CalcPointCoord(listIter->GetIndicies()),CalcPointCoord(linksIter->GetIndicies()));
       }
@@ -84,7 +90,6 @@ QPoint GraphView::CalcPointCoord(const QPoint &Indicies)
 {
    constexpr quint32 beginOffs = 20;
    constexpr quint32 mulCoeff = 20;
-
    return QPoint(beginOffs + Indicies.x() * mulCoeff,beginOffs + Indicies.y() * mulCoeff);
 }
 
@@ -98,7 +103,6 @@ QRect GraphView::ConvertVertInd2RoundRect(const QPoint &Indicies)
 
 void GraphView::paintEvent(QPaintEvent *Event)
 {
-
    QPainter Painter(this);
    DrawWorkspace(Painter);
    DrawEdges(Painter);

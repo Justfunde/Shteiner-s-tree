@@ -26,6 +26,8 @@ Node::DeleteLink(
    NodePtr Vertex)
 {
    const auto foundObj = std::find(Links.begin(), Links.end(), Vertex);
+   if(Links.end() == foundObj) { return;}
+
    Links.erase(foundObj);
 }
 
@@ -45,7 +47,7 @@ QPoint
 Node::GetIndicies() const { return Indicies; }
 
 
-NodeList
+const NodeList&
 Node::GetLinks() const { return Links; }
 
 

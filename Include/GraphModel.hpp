@@ -8,10 +8,11 @@
 #include <list>
 
 class Node;
+class GraphModel;
 
 using NodePtr = std::shared_ptr<Node>;
-
 using NodeList = std::list<NodePtr>;
+using GraphModelPtr = std::shared_ptr<GraphModel>;
 
 
 class Node
@@ -30,7 +31,7 @@ class Node
    void SetIndicies(const QPoint &Indicies);
 
    QPoint GetIndicies() const;
-   NodeList GetLinks() const;
+   const NodeList& GetLinks() const;
 
    //operators
    friend bool operator==(const Node& First,const Node& Second);
@@ -48,7 +49,7 @@ class GraphModel
 
    bool InitModel(const QString &GraphFileName);
    void SetNodes(const NodeList Nodes) { this->Nodes = Nodes;}
-   NodeList GetNodes() const;
+   const NodeList& GetNodes() const;
 };
 
 #endif //!__GRAPH_VIEW_H__

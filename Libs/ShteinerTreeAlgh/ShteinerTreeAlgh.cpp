@@ -1,96 +1,121 @@
 #include <QtMath>
 #include <QDebug>
+#include <numeric>
 
 #include "Include/ShteinerTreeAlgh.hpp"
 
-inline int area (const QPoint& a,const QPoint& b, const QPoint& c) {
+#define QINT32_MAX (std::numeric_limits<qint32>::max())
+#define QINT32_MIN (std::numeric_limits<qint32>::min())
+
+
+inline
+qint32
+ShteinerTree::AlgProcessor::CalcTriangleArea(
+   const QPoint& a,
+   const QPoint& b,
+   const QPoint& c) 
+{
 	return (b.x() - a.x()) * (c.y() - a.y()) - (b.y() - a.y()) * (c.x() - a.x());
 }
+
  
-inline bool intersect_1 (int a, int b, int c, int d) {
+inline
+bool
+ShteinerTree::AlgProcessor::IsPointsIntersected(
+   qint32 a,
+   qint32 b,
+   qint32 c,
+   qint32 d) 
+{
 	if (a > b)  std::swap (a, b);
 	if (c > d)  std::swap (c, d);
 	return qMax(a,c) <= qMin(b,d);
 }
  
-bool intersect (const QLine& fst, const QLine& scnd) {
 
-   QPoint a = fst.p1();
-   QPoint b = fst.p2();
-   QPoint c = scnd.p1();
-   QPoint d = scnd.p2();
-	return intersect_1 (a.x(), b.x(), c.x(), d.x())
-		&& intersect_1 (a.y(), b.y(), c.y(), d.y())
-		&& area(a,b,c) * area(a,b,d) <= 0
-		&& area(c,d,a) * area(c,d,b) <= 0;
+bool 
+ShteinerTree::AlgProcessor::IsIntersected (
+   const QLine& Fst,
+   const QLine& Scnd) {
+
+   QPoint a = Fst.p1();
+   QPoint b = Fst.p2();
+   QPoint c = Scnd.p1();
+   QPoint d = Scnd.p2();
+	return IsPointsIntersected (a.x(), b.x(), c.x(), d.x())
+		&& IsPointsIntersected (a.y(), b.y(), c.y(), d.y())
+		&& CalcTriangleArea(a,b,c) * CalcTriangleArea(a,b,d) <= 0
+		&& CalcTriangleArea(c,d,a) * CalcTriangleArea(c,d,b) <= 0;
 }
 
-int ShteinerTree::AlgProcessor::minminDist( NodeList &VertexList,
+
+qint32
+ShteinerTree::AlgProcessor::CalcMinManhattanDist( 
+   const NodeList&VertexList,
    NodePtr Vertex,
    const NodeList &ExceptVerticies)
 {
-    qint32 minDistance = 100000;
+    qint32 minDistance = QINT32_MAX;
    
-   for(NodeList::iterator it = VertexList.begin(); it != VertexList.end();it++)
+   for(const auto& it : VertexList)
    {      
       bool isFind = false;
-      for( NodeList::const_iterator exceptVerIter = ExceptVerticies.begin(); exceptVerIter != ExceptVerticies.end(); exceptVerIter++)
+      for( const auto& exceptVerIter : ExceptVerticies)
       {
-         if(**exceptVerIter == **it) 
+         if(*exceptVerIter == *it) 
          { isFind = true; break;}
       }
       if(isFind) { continue;}
 
-      qint32 currDistance = CalcManhattanDistance(Vertex, *it);
+      qint32 currDistance = CalcManhattanDistance(Vertex, it);
       qDebug()<< currDistance;
       if(currDistance <= minDistance && 0 != currDistance) 
       {
           minDistance = currDistance;
       }
    }
-   //qDebug() << retVal;
    return minDistance;
 }
 
-NodeList::iterator 
+NodeList::const_iterator 
 ShteinerTree::AlgProcessor::FindByVertex(
-   NodeList &VertexList,
+   const NodeList &VertexList,
    NodePtr Vertex)
 {
-   for(NodeList::iterator it = VertexList.begin();it != VertexList.end(); it++)
+   for(NodeList::const_iterator it = VertexList.begin(); it != VertexList.end(); it++)
    {
       if(**it == *Vertex) { return it;}
    }
    return VertexList.end();
 }
 
-std::shared_ptr<GraphModel> 
+GraphModelPtr 
 ShteinerTree::AlgProcessor::Process()
 {
    if(nullptr == Model) { return nullptr;}
 
    NodeList resultNodeList;
 
-
    NodeList nodeList = Model->GetNodes();
-   NodeList::iterator currentIter = nodeList.begin();
+   NodeList::const_iterator currentIter = nodeList.begin();
    NodeList exceptNodes;
    bool isOk = true;
-   uint32_t i = 0;
    while(!nodeList.empty()|| nodeList.size() != 1)
    {
-      i++;
       if(nodeList.size() == 1) 
       { break;}
       if(nodeList.size() == 2)
       {
+         nodeList.erase(currentIter);
          NodePtr first = *nodeList.begin();
-         NodePtr second = *std::next(nodeList.begin());
-         auto form = CreateLform(first,second);
-         NodePtr res = Node::CreateNode("",form.first.first.p2());
+         NodePtr res = *FindMinManhattanDistance(Model->GetNodes(),first,nodeList);
+
+         //first->AddLink(res);
+         LFormes resFormes = CreateLform(first,res);
+         NodePtr second = Node::CreateNode("",resFormes.first.first.p2());
          
-         first->AddLink(res);
-         res->AddLink(second);
+         first->AddLink(second);
+         second->AddLink(res);
 
          resultNodeList.push_back(res);
          resultNodeList.push_back(second);
@@ -112,11 +137,12 @@ ShteinerTree::AlgProcessor::Process()
       auto thirdNodeIter = FindMinManhattanDistance(nodeList,secondNode,exceptNodes);
       NodePtr thirdNode = *thirdNodeIter;
 
+      qDebug() << currNode->GetIndicies();
       qDebug() << secondNode->GetIndicies();
       qDebug() << thirdNode->GetIndicies();
 
-      std::pair<LForm,LForm> firstForms = CreateLform(currNode,secondNode);
-      std::pair<LForm,LForm> secondForms = CreateLform(secondNode, thirdNode);
+      LFormes firstForms = CreateLform(currNode,secondNode);
+      LFormes secondForms = CreateLform(secondNode, thirdNode);
       
       NodePtr resVertex = GetResultVertex(firstForms, secondForms);
       if(nullptr == resVertex) { isOk = false; break;}
@@ -133,21 +159,12 @@ ShteinerTree::AlgProcessor::Process()
       resultNodeList.push_back(secondNode);
 
       nodeList.erase(FindByVertex(nodeList,currNode));
-      //nodeList.erase(FindByVertex(nodeList,secondNode));
-      
-      //if(minminDist(nodeList,resVertex,exceptNodes) < minminDist(nodeList,secondNode,exceptNodes))
-      //{
-      //  // nodeList.erase(FindByVertex(nodeList,secondNode));
-      //  // currentIter =FindByVertex (resultNodeList,resVertex);
-      //}
-      //else {
-         currentIter = FindByVertex(nodeList,secondNode); 
+      currentIter = FindByVertex(nodeList,secondNode); 
       
       qDebug() << (*currentIter)->GetIndicies();
-      //if(i == 2) { break;}
    }
 
-   std::shared_ptr<GraphModel> resultModel(new GraphModel);
+   GraphModelPtr resultModel(new GraphModel);
    resultModel->SetNodes(resultNodeList);
    return resultModel;
 }
@@ -167,17 +184,16 @@ ShteinerTree::AlgProcessor::CalcManhattanDistance(
 }
 
 
-inline
-NodeList::iterator
+NodeList::const_iterator
 ShteinerTree::AlgProcessor::FindMinManhattanDistance(
-   NodeList &VertexList,
+   const NodeList &VertexList,
    NodePtr Vertex,
    const NodeList &ExceptVerticies)
 {
-   qint32 minDistance = 100000;
-   NodeList::iterator retVal = VertexList.begin();
+   qint32 minDistance = QINT32_MAX;
+   NodeList::const_iterator retVal = VertexList.begin();
    
-   for(NodeList::iterator it = VertexList.begin(); it != VertexList.end();it++)
+   for(NodeList::const_iterator it = VertexList.begin(); it != VertexList.end();it++)
    {      
       bool isFind = false;
       for( NodeList::const_iterator exceptVerIter = ExceptVerticies.begin(); exceptVerIter != ExceptVerticies.end(); exceptVerIter++)
@@ -196,17 +212,16 @@ ShteinerTree::AlgProcessor::FindMinManhattanDistance(
           retVal = it;
       }
    }
-   //qDebug() << retVal;
    return retVal;
 }
 
 
-std::pair<LForm,LForm>
+LFormes
 ShteinerTree::AlgProcessor::CreateLform(
    NodePtr Fst,
    NodePtr Scnd)
 {
-   std::pair<LForm,LForm> retVal;
+   LFormes retVal;
    if(nullptr == Fst || nullptr == Scnd){ return retVal;}
 
    const QPoint fstPoint = Fst->GetIndicies();
@@ -220,6 +235,7 @@ ShteinerTree::AlgProcessor::CreateLform(
    return retVal;
 }
 
+
  bool
  ShteinerTree::AlgProcessor::IsLFormIntersected(
    const LForm &Fst,
@@ -227,11 +243,11 @@ ShteinerTree::AlgProcessor::CreateLform(
 {
    //Fst.first with scnd;
 
-   if(intersect(Fst.first,Scnd.first)) { return true;}
-   if(intersect(Fst.first,Scnd.second)) { return true;}
+   if(IsIntersected(Fst.first,Scnd.first)) { return true;}
+   if(IsIntersected(Fst.first,Scnd.second)) { return true;}
 
-   if(intersect(Fst.second,Scnd.first)) { return true;}
-   if(intersect(Fst.second,Scnd.second)) { return true;}
+   if(IsIntersected(Fst.second,Scnd.first)) { return true;}
+   if(IsIntersected(Fst.second,Scnd.second)) { return true;}
 
    return false;
 
@@ -240,8 +256,8 @@ ShteinerTree::AlgProcessor::CreateLform(
 
 NodePtr
 ShteinerTree::AlgProcessor::GetResultVertex(
-  std::pair<LForm,LForm> Fst,
-  std::pair<LForm,LForm> Scnd)
+  const LFormes& Fst,
+  const LFormes& Scnd)
 {
    if(IsLFormIntersected(Fst.first,Scnd.first)) { return Node::CreateNode("",Fst.first.first.p2());}
    if(IsLFormIntersected(Fst.first,Scnd.second)) { return Node::CreateNode("",Fst.first.first.p2());}

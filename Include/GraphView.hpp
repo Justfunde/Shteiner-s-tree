@@ -14,14 +14,13 @@ class GraphView:public QWidget
 {
    //todo:add Q_OBJECT
    private:
-   std::shared_ptr<GraphModel> Model;
+   GraphModelPtr Model;
    
-
    public:
    explicit GraphView(QWidget *Parent = nullptr);
-   void SetModel(std::shared_ptr<GraphModel> Model) {this->Model = Model; update(); }
+   void SetModel(GraphModelPtr Model) {this->Model = Model; update(); }
 
-   std::shared_ptr<GraphModel> GetModel() const { return Model;}
+   GraphModelPtr GetModel() const { return Model;}
 
    protected:
    virtual void paintEvent(QPaintEvent *Event) override final;
@@ -32,7 +31,6 @@ class GraphView:public QWidget
    void DrawEdges(QPainter &Painter);
 
    QPoint CalcPointCoord(const QPoint &Indicies);
-
    QRect ConvertVertInd2RoundRect(const QPoint &Indicies);
 };
 

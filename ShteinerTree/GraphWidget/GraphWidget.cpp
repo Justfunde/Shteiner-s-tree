@@ -26,7 +26,7 @@ GraphWidget::GraphWidget(
    mainLayout->addLayout(matrLayout);
    setLayout(mainLayout);
    setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding );
-   setFixedSize(400, 400);
+   //setFixedSize(400, 400);
 }
 
 
@@ -36,7 +36,7 @@ GraphWidget::ReadFile(
 {
    if(fName.isEmpty()) { return;}
 
-   std::shared_ptr<GraphModel> model(new GraphModel);
+   GraphModelPtr model(new GraphModel);
    model->InitModel(fName);
    View->SetModel(model);
 }

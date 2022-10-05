@@ -5,7 +5,9 @@
 #include "Include/GraphModel.hpp"
 
 
-GraphModel::GraphModel():Nodes(NodeList()) {}
+GraphModel::GraphModel():Nodes(NodeList()) 
+{}
+
 
 bool
 GraphModel::InitModel(
@@ -31,11 +33,19 @@ GraphModel::InitModel(
          tmpList.push_back(Node::CreateNode(nodeName,QPoint(j,i)));
       }
       if(!retVal) { break;}
-      Nodes = tmpList;
+
+      Nodes.sort([](NodePtr p1, NodePtr p2)
+         {
+            const QPoint& p1Point = p1->GetIndicies();
+            const QPoint& p2Point = p2->GetIndicies();
+            return p1Point.x() < p2Point.x() && p1Point.y() < p2Point.y();
+         });
+
+      Nodes = std::move(tmpList);
    } while (false);
 return retVal;
 }
 
 
-NodeList
+const NodeList&
 GraphModel::GetNodes() const {return Nodes;}
