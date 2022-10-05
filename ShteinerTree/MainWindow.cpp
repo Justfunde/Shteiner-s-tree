@@ -11,6 +11,8 @@ MainWindow::MainWindow(QWidget* Parent)
    ,FirstGraphWidget(new GraphWidget("Исходная матрица"))
    ,SecondGraphWidget(new GraphWidget("Преобразованная матрица"))
 {
+   setWindowIcon(QIcon(":Images/Mw.ico"));
+
    setCentralWidget(new QWidget);
 
    QHBoxLayout* buttonsLayout = new QHBoxLayout;
