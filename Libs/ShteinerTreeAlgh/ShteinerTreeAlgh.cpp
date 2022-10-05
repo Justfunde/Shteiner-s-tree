@@ -108,9 +108,11 @@ ShteinerTree::AlgProcessor::Process()
       {
          nodeList.erase(currentIter);
          NodePtr first = *nodeList.begin();
-         NodePtr res = *FindMinManhattanDistance(Model->GetNodes(),first,nodeList);
 
-         //first->AddLink(res);
+         auto tmpIter = FindMinManhattanDistance(Model->GetNodes(),first,nodeList);
+         if(Model->GetNodes().end() == tmpIter) {isOk = false; break;}
+         NodePtr res = *tmpIter;
+
          LFormes resFormes = CreateLform(first,res);
          NodePtr second = Node::CreateNode("",resFormes.first.first.p2());
          
@@ -121,7 +123,6 @@ ShteinerTree::AlgProcessor::Process()
          resultNodeList.push_back(second);
          resultNodeList.push_back(first);
          break;
-
       }
       
       // current node
@@ -130,11 +131,15 @@ ShteinerTree::AlgProcessor::Process()
 
       // secondNode
       auto secondNodeIter = FindMinManhattanDistance(nodeList, currNode, exceptNodes);
+      if(secondNodeIter == nodeList.end()) {isOk = false; break;}
+
       NodePtr secondNode = *secondNodeIter;
       exceptNodes.push_back(secondNode);
 
       //thirdNode
       auto thirdNodeIter = FindMinManhattanDistance(nodeList,secondNode,exceptNodes);
+      if(thirdNodeIter == nodeList.end()) {isOk = false; break;}
+
       NodePtr thirdNode = *thirdNodeIter;
 
       qDebug() << currNode->GetIndicies();
@@ -146,6 +151,7 @@ ShteinerTree::AlgProcessor::Process()
       
       NodePtr resVertex = GetResultVertex(firstForms, secondForms);
       if(nullptr == resVertex) { isOk = false; break;}
+
       exceptNodes.push_back(resVertex);
       qDebug() << resVertex->GetIndicies();
 
@@ -160,9 +166,9 @@ ShteinerTree::AlgProcessor::Process()
 
       nodeList.erase(FindByVertex(nodeList,currNode));
       currentIter = FindByVertex(nodeList,secondNode); 
-      
-      qDebug() << (*currentIter)->GetIndicies();
+      if(currentIter == nodeList.end()) {isOk = false; break;}      
    }
+   if(!isOk) { return nullptr;}
 
    GraphModelPtr resultModel(new GraphModel);
    resultModel->SetNodes(resultNodeList);
