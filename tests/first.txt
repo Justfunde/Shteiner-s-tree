@@ -1,0 +1,6 @@
+node 2 2
+node 3 3
+node 5 5
+node 6 6
+node 4 2
+node 2 5
