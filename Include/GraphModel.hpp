@@ -23,7 +23,7 @@ class Node
    QPoint Indicies;
 
    public:
-   Node::Node( const QString &Name, const QPoint &Indicies = QPoint(0,0));
+   Node( const QString &Name, const QPoint &Indicies = QPoint(0,0));
 
    void AddLink(NodePtr Vertex);
    void DeleteLink(NodePtr Vertex);

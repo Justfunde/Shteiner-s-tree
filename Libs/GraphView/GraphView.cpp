@@ -4,9 +4,9 @@
 
 namespace WorkspaceParameters
 {
-   constexpr quint32 width = 220;
-   constexpr quint32 height = 220;
-   constexpr quint32 vertexSz = 10;
+   constexpr quint32 width = 300;
+   constexpr quint32 height = 300;
+   constexpr quint32 vertexSz = 40;
 }
 
 GraphView::GraphView(
